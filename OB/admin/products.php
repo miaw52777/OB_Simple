@@ -2,6 +2,7 @@
 include_once("../dbAccess/conn.php");
 include_once("../dbAccess/ProductCategoryFunc.php");
 include_once("../dbAccess/ProductFunc.php");
+include_once("../dbAccess/3DFunc.php");
 include('./adsecure.php');
 
 
@@ -162,8 +163,10 @@ $LevelRootCnt = getLevel1CategoryCount($queryResult);
                     <thead>
                       <tr>
                         <th>名稱</th>
+						<th>3D完成</th>
                         <th>結構</th>
                         <th>狀態</th>
+						<th>建立日期</th>
                         <th>操作</th>
                       </tr>
                     </thead>
@@ -194,6 +197,14 @@ $LevelRootCnt = getLevel1CategoryCount($queryResult);
 							//dynamic produce the product infomation	
 							$tmplateForlist = '<tr>
 							<td>:ProductName</td>
+							<td><div class="card-block">
+								<div class="icheck1">
+								  <fieldset>
+									<input type="checkbox" name="is_3d_complete" :3D_COMPLETE_CHECKED  disabled />
+								  </fieldset>
+								</div>
+							  </div>
+							</td>
 							<td>:ProductCatRoot</td>
 							<td><div class="card-block">
 								<div class="icheck1">
@@ -202,6 +213,7 @@ $LevelRootCnt = getLevel1CategoryCount($queryResult);
 								  </fieldset>
 								</div>
 							  </div></td>
+							  <td>:CREATE_DATE</td>
 							<td><div class="btn-group" role="group" aria-label="Basic example"> 
 								<button type="button" class="btn btn-success" name="Edit" onClick="location.href=\'products-edit.php?action=編輯&id=:PROD_CAT_ID&prod_id=:ProductId\';")>編輯</button>
 								<button type="button" class="btn btn-warning" name="Delete" onClick="location.href=\'products-edit.php?action=刪除&id=:PROD_CAT_ID&prod_id=:ProductId\';">刪除</button>
@@ -209,10 +221,23 @@ $LevelRootCnt = getLevel1CategoryCount($queryResult);
 								<button type="button" class="btn btn-danger" name="product_3D" onClick="location.href=\'3d.php?id=:PROD_CAT_ID&prod_id=:ProductId\';">產品 3D</button>								
 							  </div></td>
 						  </tr>';
+							
+							$rule = get_3D_CommonFile_Select_Rule('PROD_ID', $tempProd['product_id']);
+							$queryCommonFileResult = get_3D_CommonFile($rule);	
+							$link = getSQLResultInfo($queryCommonFileResult['DATA'],'link');
+							
+							if($link != '')
+							{
+								$check_3d_complete = 'checked';
+							}
+							else 
+							{
+								$check_3d_complete = '';
+							}
+						
 									
-									
-							$sourceStr = array(":ProductName", ":PROD_CAT_ID", ":ProductId", ":ProductCatRoot", ":CHECKED");
-							$replaceStr   = array($tempProd['name'],$temp['id'],$tempProd['product_id'], $temp['Product_Root'],$isChecked);
+							$sourceStr = array(":ProductName", ":PROD_CAT_ID", ":ProductId", ":ProductCatRoot", ":CHECKED",":CREATE_DATE",":3D_COMPLETE_CHECKED");
+							$replaceStr   = array($tempProd['name'],$temp['id'],$tempProd['product_id'], $temp['Product_Root'],$isChecked,$tempProd['create_date'],$check_3d_complete);
 							echo str_replace($sourceStr, $replaceStr,$tmplateForlist);
 						}
 				   } 
@@ -225,8 +250,10 @@ $LevelRootCnt = getLevel1CategoryCount($queryResult);
                     <tfoot>
                       <tr>
                         <th>名稱</th>
+						<th>3D完成</th>
                         <th>結構</th>
                         <th>狀態</th>
+						<th>建立日期</th>
                         <th>操作</th>
                       </tr>
                     </tfoot>

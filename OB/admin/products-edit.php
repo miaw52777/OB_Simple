@@ -44,7 +44,8 @@ if(mysql_num_rows($queryResult)>0)
 	$Product_filepath_1 = $temp['filepath_1'];
 	$Product_filepath_2 = $temp['filepath_2'];
 	$Product_filepath_3 = $temp['filepath_3'];
-	$Product_filepath_4 = $temp['filepath_4'];	
+	$Product_filepath_4 = $temp['filepath_4'];
+	$Email = $temp['email'];
 	$Product_desc = getProduct_description($ProductID,'../'.$UploadfileRoot);
  
 }	  	
@@ -294,7 +295,15 @@ function edit_click()
                         <label class="col-md-3 label-control" for="projectinput3">排序</label>
                         <div class="col-md-9">
 						   <?
-						  echo '<input type="text" name="Seq" id="projectinput3" class="form-control" placeholder="排序" name="Seq" value = "'.$Product_seq.'">';
+						  echo '<input type="text" name="Seq" id="projectinput3" class="form-control" placeholder="排序" value = "'.$Product_seq.'">';
+						 ?> 
+                        </div>
+                      </div>
+					  <div class="form-group row">
+                        <label class="col-md-3 label-control" for="projectinput3">E-mail</label>
+                        <div class="col-md-9">
+						   <?
+						  echo '<input type="text" name="email" id="projectinput3" class="form-control" placeholder="E-mail" value = "'.$Email.'">';
 						 ?> 
                         </div>
                       </div>

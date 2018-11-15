@@ -12,8 +12,17 @@ function sendMail($mailtoName,$mailto,$Subject,$Content,$Filepath,$mailcc='',$is
 
 	$mail->From = "obamwvvq@premium4.web-hosting.com";
 	$mail->FromName = "obambooq";
-	$mail->AddAddress($mailto,$mailtoName); //收件者郵件及名稱
-
+	
+	$mailtolist = explode(',',$mailto);
+	
+	for($i=0;$i<count($mailtolist);$i++)
+	{	
+		if(trim($mailtolist[$i]) != "")
+		{
+			$mail->AddAddress($mailtolist[$i],$mailtoName); //收件者郵件及名稱			
+		}
+	}
+	
 	$mailcclist = explode(',',$mailcc);
 	
 	for($i=0;$i<count($mailcclist);$i++)

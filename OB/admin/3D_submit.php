@@ -3,7 +3,7 @@ include_once("../dbAccess/conn.php");
 include_once("../dbAccess/3DFunc.php");
 include_once("../dbAccess/CommFunc.php");
 include_once("../dbAccess/FileIOFunc.php");
-include_once("../dbAccess/MailFunc.php");
+include_once("../dbAccess/MailFunc.php");$webDir = str_replace('admin','',dirname($_SERVER['PHP_SELF']));$webHome = "http://".$_SERVER['HTTP_HOST'].$webDir;
 
 $msg = '';
 
@@ -96,7 +96,7 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 		if($perform_upload)
 		{	
 			//開始上傳新的檔案
-		echo 'Execute to upload file action => '.$fileRoot.$filepath_cmf.' ...<br>';
+		    echo 'Execute to upload file action => '.$fileRoot.$filepath_cmf.' ...<br>';
 			$msg = uploadFile($fileRoot, $_FILES['file_CMF']); // perform uploading files			
 			echo 'End to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';
 			if($msg=='')
@@ -129,7 +129,7 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 				if($msg != "")
 				{
 					$is_success = false;
-				}		
+				}						else				{					/* get common filename*/					$rule = get_3D_CommonFile_Select_Rule('PROD_ID',$pid); 					$returnMsg = get_3D_CommonFile($rule); /* check product is exists*/					$filename = getSQLResultInfo($returnMsg['DATA'],'filepath');										$msg = sendMailWhenUpdatelink($webHome,$prod_cat_id,$pid,$filename);					if($msg != "")					{						$is_success = false;					}				}
 			}
 			if(!$is_success) echo $msg.'<br>';
 		}

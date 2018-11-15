@@ -92,12 +92,12 @@ function get_Products_List($rule='')
  
 
 // 新增產品
-function insertProduct($product_cat_id, $name,$valid,$seq,$desc)
+function insertProduct($product_cat_id, $name,$valid,$seq,$desc,$email)
 {
 	include_once("CommFunc.php");	
 		
-	$sql = sprintf("INSERT INTO products (product_cat_id, name,valid, seq,description) VALUES ('%s','%s','%s','%s','%s')"
-				  ,$product_cat_id,$name,$valid,$seq,$desc);	
+	$sql = sprintf("INSERT INTO products (product_cat_id, name,valid, seq,description,email,create_date) VALUES ('%s','%s','%s','%s','%s','%s',DATE(NOW()))"
+				  ,$product_cat_id,$name,$valid,$seq,$desc,$email);	
 	
 	$msg = ExecuteSQL($sql);
 	return $msg;
@@ -107,22 +107,22 @@ function insertProductAndFilepath($product_cat_id, $name,$valid,$seq,$desc,$file
 {
 	include_once("CommFunc.php");	
 		
-	$sql = sprintf("INSERT INTO products (product_cat_id, name,valid, seq,description,filepath_1,filepath_2,filepath_3,filepath_4) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+	$sql = sprintf("INSERT INTO products (product_cat_id, name,valid, seq,description,filepath_1,filepath_2,filepath_3,filepath_4,create_date) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s',DATE(NOW()))"
 				  ,$product_cat_id,$name,$valid,$seq,$desc,$filepath_1,$filepath_2,$filepath_3,$filepath_4);		
 	$msg = ExecuteSQL($sql);
 	return $msg;
 }
 
 // 更新產品資訊
-function updateProduct($prod_id, $product_cat_id, $name,$valid,$seq)
+function updateProduct($prod_id, $product_cat_id, $name,$valid,$seq,$email)
 {
 	include_once("CommFunc.php");	
  
 	$sql = sprintf("update products
-					  set name = '%s', valid = '%s', seq = '%s', product_cat_id = '%s'
+					  set name = '%s', valid = '%s', seq = '%s', product_cat_id = '%s', email = '%s'
 					  where 1=1
 							and product_id = '%s'"
-					 ,$name,$valid,$seq,$product_cat_id,$prod_id);					
+					 ,$name,$valid,$seq,$product_cat_id,$email,$prod_id);					
 			 
 	 $msg = ExecuteSQL($sql);
  	 return $msg;

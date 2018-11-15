@@ -18,6 +18,7 @@ $filepath1 = $_FILES["file1"]["name"];
 $filepath2 = $_FILES["file2"]["name"]; 
 $filepath3 = $_FILES["file3"]["name"]; 
 $filepath4 = $_FILES["file4"]["name"]; 
+$email = $_POST['email'];
  
 $fileRoot = '../'.$UploadfileRoot.'products/';
 
@@ -130,7 +131,7 @@ elseif($paction == "新增") // modify
 	// start to insert information to product table
 	if($is_success)
 	{	
-		$msg = insertProduct($product_cat_id,$pname,$pvalid,$pseq,$desc);
+		$msg = insertProduct($product_cat_id,$pname,$pvalid,$pseq,$desc,$email);
 		if($msg == "") // db insert error, don't upload file
 		{
 			echo 'Insert data successfully... <br> Start to upload file...<br>';		
@@ -193,7 +194,7 @@ else //修改
 	 
 	if($is_success)
 	{		
-		$msg = updateProduct($product_id,$product_cat_id,$pname,$pvalid,$pseq);
+		$msg = updateProduct($product_id,$product_cat_id,$pname,$pvalid,$pseq,$email);
 		if($msg == '') // db update error, don't upload file
 		{
 			echo 'Update db record successfully... <br>';

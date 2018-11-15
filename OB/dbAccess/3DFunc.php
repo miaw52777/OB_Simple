@@ -387,7 +387,7 @@ function sendMailWhenfilechange($prod_cat_id,$prod_id,$spec_name,$mailFilepath)
 	return sendMail($mailtoName,$mailto,$mailSubject,$mailContent,$mailFilepath,$mailcc);
 
 } 
-
+function sendMailWhenUpdatelink($webHome,$prod_cat_id,$prod_id,$filename){	include_once("../dbAccess/conn.php");			include_once("../dbAccess/CommFunc.php");		include_once("../dbAccess/MailFunc.php");	include_once("../dbAccess/ProductCategoryFunc.php");	include_once("../dbAccess/ProductFunc.php");	/*get product category info */	$rule = get_Products_Category_Select_Rule("ID",$prod_cat_id);	$queryProductCat = get_Products_Category_List($rule,'');	$prod_cat_name = getSQLResultInfo($queryProductCat,'Product_Name');		/* get product info */	$rule = get_Products_Select_Rule('ID',$prod_id);							$queryProduct = get_Products_List($rule);	$mailto = getSQLResultInfo($queryProduct,'email');		/* define mail information */ 	$mailtoName = "";	$mailcc = "";	$mailSubject = "GUNION_[ ".$filename."  ] [ ".$prod_cat_name." ] - ob3DHost - ".getToday();	$web_url = $webHome.'standard_product-structure-display.php?level=final&id='.$prod_cat_id.'&prod_id='.$prod_id;	$mailContent = '<a href="'.$web_url.'">'.$web_url.'</a> <br>';	$mailContent .= "<br>					ANITA<br>					Operations Director<br>					Obamboo Inc.<br>					冠麗數位資訊股份有限公司<br>					+ 886 4 2205 8111 EXT.120<br>					www.obamboo.com<br>					";			return sendMail($mailtoName,$mailto,$mailSubject,$mailContent,"",$mailcc,true);} 
 
 function getProgress($filepath,$link)
 {

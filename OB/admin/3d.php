@@ -144,8 +144,25 @@
                   <table class="table table-striped table-bordered ">
                     <thead>
                       <tr>
-                        
+                        <?								
+						 	$rule = get_3D_CommonFile_Select_Rule('PROD_ID',$Product_id);
+							$selectResult = get_3D_CommonFile($rule);
+							$fileRoot = '../'.$UploadfileRoot.'3d_commonfile/';
+							$link = '';
+							if(($selectResult['DATA'] != "") && ($selectResult['REC_CNT'] > 0))
+							{
+								$filepath = getSQLResultInfo($selectResult['DATA'],'filepath');
+								$link = getSQLResultInfo($selectResult['DATA'],'link');
+								$progress = getProgress($filepath,$link);
+							}
+							else
+							{
+								$filepath = '未選擇任何檔案';
+								$progress = 0;
+							}
+					    ?>
                         <th>檔案</th>
+						<? if($link != '') echo '<th>前台</th>'; ?>
                         <th>操作</th>
                         <th>進度</th>
                       </tr>
@@ -153,9 +170,37 @@
                     <tbody>					 					<form class="form form-horizontal" action="3D_submit.php" method="post" enctype="multipart/form-data">
                       <tr>
                         
-                        <td>																			<?								
-						 								$rule = get_3D_CommonFile_Select_Rule('PROD_ID',$Product_id);									$selectResult = get_3D_CommonFile($rule);																	$fileRoot = '../'.$UploadfileRoot.'3d_commonfile/';										if(($selectResult['DATA'] != "") && ($selectResult['REC_CNT'] > 0))										{																		$filepath = getSQLResultInfo($selectResult['DATA'],'filepath');																		$link = getSQLResultInfo($selectResult['DATA'],'link');																		$progress = getProgress($filepath,$link);																									}																else																{																		$filepath = '未選擇任何檔案';																			$progress = 0;																	}																									$tmplateForlist = '<div class="form-group row">																						<label id="projectinput8" class="file center-block">										<input type="button" value="選擇檔案" onClick="this.form.file_:KEY.click();">										<input type="file" name="file_:KEY" id="file_:KEY" size="20" class="ifile" onChange="checkit(\'lbl_:KEY\',this.value.substr(this.value.lastIndexOf(\'\\\\\')+1))">																						<label id="lbl_:KEY">:FILEPATH</label></div>';																																$sourceStr = array(":FILEPATH", ":KEY");																$replaceStr   = array($filepath, 'CMF');																echo str_replace($sourceStr, $replaceStr,$tmplateForlist);		
-						?>												</td>							
+                        <td>								
+						<?
+							
+									$tmplateForlist = '<div class="form-group row">
+									<label id="projectinput8" class="file center-block">
+									<input type="button" value="選擇檔案" onClick="this.form.file_:KEY.click();">
+									<input type="file" name="file_:KEY" id="file_:KEY" size="20" class="ifile" onChange="checkit(\'lbl_:KEY\',this.value.substr(this.value.lastIndexOf(\'\\\\\')+1))">
+									<label id="lbl_:KEY">:FILEPATH</label></div>';
+									$sourceStr = array(":FILEPATH", ":KEY");
+									$replaceStr   = array($filepath, 'CMF');
+									echo str_replace($sourceStr, $replaceStr,$tmplateForlist);
+											
+											
+						?>	
+						</td>							
+						
+						<? 
+						
+							if($link != "") 
+							{
+								$webDir = str_replace('admin','',dirname($_SERVER['PHP_SELF']));
+								$webHome = "http://".$_SERVER['HTTP_HOST'].$webDir;
+								$web_url = $webHome.'standard_product-structure-display.php?level=final&id='.$prod_cat_id.'&prod_id='.$Product_id;
+								echo '<td><a href="'.$web_url.'">'.$web_url.'</a> <br></td>';
+							}
+							else
+							{
+								echo '';
+							}
+					    ?>
+						
                         <td><button type="submit" class="btn btn-success" name = 'action' value='commonfile_store'/> <i class="icon-check2"></i> 儲存												<button class="btn">							<a href="<? echo $fileRoot.$filepath; ?>" download>下載</a>						</button>						</td>					
                         <td><progress value="<? echo $progress; ?>" max="100" class="progress progress-info mb-0"><? echo $progress; ?>%</progress></td>
                         <!--<td><button type="button" class="btn" onclick="location.href='download.php?pageaction=3d&<? echo 'id='.$prod_cat_id.'&prod_id='.$Product_id; ?>';">Download 檔案</button></td>		-->				<input type="hidden" class="btn btn-success" name = "id" value='<? echo $prod_cat_id; ?>'/>						<input type="hidden" class="btn btn-success" name = "prod_id" value='<? echo $Product_id; ?>'/>
