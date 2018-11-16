@@ -52,16 +52,21 @@ function archiveFile($filelist,$fileRoot,$zipname)
 		return '';		
 	}
 }
- function uploadFile($fileRoot,$fileInfo)
+ function uploadFile($fileRoot,$fileInfo,$timestamp='')
  {
    include_once("conn.php");	
+   include_once("CommFunc.php");
  
    $msg = '';
    
    if ($fileInfo['error'] == 0)
    {
 		$allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
-		$filename = $fileInfo["name"];
+		
+		$filename = '';
+		if($timestamp != "") $filename = $timestamp.'_'.$fileInfo["name"];
+		else $filename = $fileInfo["name"];
+		
 		$filetype = $fileInfo["type"];
 		$filesize = $fileInfo["size"];		
 	

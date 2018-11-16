@@ -56,7 +56,7 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 			{
 				//檔案相同，不異動資料		
 				echo 'New upload file =>'.$filepath_cmf.' and old file '.$old_file.' are the same.<br>';
-				$perform_upload=false;
+				$perform_upload=true;
 			}
 			else
 			{
@@ -92,12 +92,12 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 			echo 'New file<br>';
 		}
 		//開始上傳新的檔案
-		echo '(Has product record) Start to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';
+		echo '(Has product record) Start to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';		$timestamp = getTimestamp();		$filepath_cmf = $timestamp.'_'.$filepath_cmf;		
 		if($perform_upload)
 		{	
 			//開始上傳新的檔案
 		    echo 'Execute to upload file action => '.$fileRoot.$filepath_cmf.' ...<br>';
-			$msg = uploadFile($fileRoot, $_FILES['file_CMF']); // perform uploading files			
+			$msg = uploadFile($fileRoot, $_FILES['file_CMF'],$timestamp); // perform uploading files			
 			echo 'End to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';
 			if($msg=='')
 			{
@@ -129,7 +129,7 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 				if($msg != "")
 				{
 					$is_success = false;
-				}						else				{					/* get common filename*/					$rule = get_3D_CommonFile_Select_Rule('PROD_ID',$pid); 					$returnMsg = get_3D_CommonFile($rule); /* check product is exists*/					$filename = getSQLResultInfo($returnMsg['DATA'],'filepath');										$msg = sendMailWhenUpdatelink($webHome,$prod_cat_id,$pid,$filename);					if($msg != "")					{						$is_success = false;					}				}
+				}						else				{					/* get common filename*/					echo 'Start to send mail...<br>';					$rule = get_3D_CommonFile_Select_Rule('PROD_ID',$pid); 					$returnMsg = get_3D_CommonFile($rule); /* check product is exists*/					$filename = getSQLResultInfo($returnMsg['DATA'],'filepath');										sendMailWhenUpdatelink($webHome,$prod_cat_id,$pid,$filename);										echo 'End of send mail...<br>';				}
 			}
 			if(!$is_success) echo $msg.'<br>';
 		}
@@ -138,13 +138,13 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 	{
 		// new product	
 		if(($paction == "commonfile_edit_store") && ($plink != ""))
-		{
+		{			$timestamp = getTimestamp();			$filepath_cmf = $timestamp.'_'.$filepath_cmf;
 			// link not null, first to insert record
 			$msg = insert3D_CommonFile($pid,$filepath_cmf,$plink);	
 			if($msg == '')			
 			{
 				echo '(New product) Start to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';
-				$msg = uploadFile($fileRoot, $_FILES['file_CMF']); // perform uploading files 				
+				$msg = uploadFile($fileRoot, $_FILES['file_CMF'],$timestamp); // perform uploading files 				
 				if($msg != "")
 				{
 					$is_success = false; 
@@ -161,8 +161,8 @@ elseif (($paction == "commonfile_store")  || ($paction == "commonfile_edit_store
 		else 
 		{
 			// only update filepath
-			echo '(New product, only update file) Start to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';
-			$msg = uploadFile($fileRoot, $_FILES['file_CMF']); // perform uploading files 				
+			echo '(New product, only update file) Start to upload file => '.$fileRoot.$filepath_cmf.' ...<br>';			$timestamp = getTimestamp();			$filepath_cmf = $timestamp.'_'.$filepath_cmf;
+			$msg = uploadFile($fileRoot, $_FILES['file_CMF'],$timestamp); // perform uploading files 				
 			if($msg=='')
 			{
 				echo 'upload file successfully... <br>Start to insert record to db ';

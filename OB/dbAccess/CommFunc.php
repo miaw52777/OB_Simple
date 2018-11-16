@@ -172,5 +172,11 @@ function getToday()
    $rectime = date("Y-m-d"); 
    return $rectime;
 }
+function getTimestamp()
+{
+	date_default_timezone_set('Asia/Taipei');
+	$timestamp = date('YmdGis', time());
+	return $timestamp;	
+}
 ?>
 
